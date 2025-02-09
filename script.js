@@ -1,31 +1,53 @@
 const toDoList = document.getElementById("todo-list");
 const toDoInput = document.getElementById("todo-input");
 
-console.log("todo list" , toDoList);
-
-
 document.addEventListener("DOMContentLoaded", function() {
     let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
     tasks.forEach(function(task) {
-        const toDoItem = document.createElement("li");
-        toDoItem.textContent = task;
-        toDoList.appendChild(toDoItem);
+        addTaskToDOM(task);
     });
 });
 
 
 function addToDo() {
-    console.log("Add to do...")
     if (toDoInput.value === "") {
-        console.log("Please add sth");
-        alert("Please add sth");
+        alert("لطفاً یک کار اضافه کنید!");
     } else {
-        const toDoItem = document.createElement("li");
-        toDoItem.textContent = toDoInput.value;
-        toDoList.appendChild(toDoItem);
-        let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
-        tasks.push(toDoInput.value);
-        localStorage.setItem("tasks", JSON.stringify(tasks));
+        addTaskToDOM(toDoInput.value);
+        saveTaskToLocalStorage(toDoInput.value);
         toDoInput.value = "";
     }
+}
+
+
+function addTaskToDOM(taskText) {
+    const toDoItem = document.createElement("li");
+    toDoItem.textContent = taskText;
+
+
+    const deleteBtn = document.createElement("button");
+    deleteBtn.textContent = "❌";
+    deleteBtn.style.marginLeft = "10px";
+    deleteBtn.onclick = function () {
+        removeTask(taskText, toDoItem);
+    };
+
+    toDoItem.appendChild(deleteBtn);
+    toDoList.appendChild(toDoItem);
+}
+
+
+function saveTaskToLocalStorage(taskText) {
+    let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+    tasks.push(taskText);
+    localStorage.setItem("tasks", JSON.stringify(tasks));
+}
+
+
+function removeTask(taskText, toDoItem) {
+    let tasks = JSON.parse(localStorage.getItem("tasks")) || [];
+    tasks = tasks.filter(task => task !== taskText);
+    localStorage.setItem("tasks", JSON.stringify(tasks));
+
+    toDoItem.remove();
 }
