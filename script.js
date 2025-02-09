@@ -11,7 +11,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
 function addToDo() {
     if (toDoInput.value === "") {
-        alert("لطفاً یک کار اضافه کنید!");
+        alert("Please add a task");
     } else {
         addTaskToDOM(toDoInput.value);
         saveTaskToLocalStorage(toDoInput.value);
